@@ -6,6 +6,7 @@ class Login extends CI_Controller {
     function __construct() {
         parent::__construct();
         $this->load->helper('form');
+        $this->load->model('user');
       
     }
 
@@ -15,6 +16,7 @@ class Login extends CI_Controller {
  
    		$this->form_validation->set_rules('username', 'Username', 'trim|required');
    		$this->form_validation->set_rules('password', 'Password', 'trim|required|callback_check_database');
+   		$this->form_validation->set_message('required','El campo %s es obligatorio'); 
 
    		if($this->form_validation->run() == FALSE){
    			$this->load->view("login");
@@ -41,7 +43,7 @@ class Login extends CI_Controller {
      		foreach($result as $row)
      		{
        		$sess_array = array(
-         						'id' => $row->id,
+         						'id_user' => $row->id_user,
          						'username' => $row->username
        							);
        		$this->session->set_userdata('logged_in', $sess_array);
@@ -50,7 +52,7 @@ class Login extends CI_Controller {
    		}
    		else
    		{
-     		$this->form_validation->set_message('check_database', 'Usuario o Password incorrectos');
+     		$this->form_validation->set_message('check_database', 'Usuario y/o Password incorrectos');
      		return false;
    		}
     }
@@ -61,6 +63,6 @@ class Login extends CI_Controller {
  	 {
    		$this->session->unset_userdata('logged_in');
    		session_destroy();
-   		redirect('home', 'refresh');
+   		redirect('login');
  	 }
 }
