@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Login extends CI_Controller {
+class Login extends MY_Controller {
 
     function __construct() {
         parent::__construct();
@@ -10,11 +10,12 @@ class Login extends CI_Controller {
       
     }
 
-	function index(){
+	function index()
+  {
 
-		 $this->load->library('form_validation');
+		$this->load->library('form_validation');
  
-   		$this->form_validation->set_rules('username', 'Username', 'trim|required');
+   		$this->form_validation->set_rules('username', 'Usuario', 'trim|required');
    		$this->form_validation->set_rules('password', 'Password', 'trim|required|callback_check_database');
    		$this->form_validation->set_message('required','El campo %s es obligatorio'); 
 
@@ -23,11 +24,11 @@ class Login extends CI_Controller {
    		}
    		else
    		{
-   			echo "Entró";
+   			redirect("inicio");
 
    		}
     	
-    }
+  }
 
    function check_database($password)
    {
@@ -44,9 +45,11 @@ class Login extends CI_Controller {
      		{
        		$sess_array = array(
          						'id_user' => $row->id_user,
-         						'username' => $row->username
+         						'username' => $row->username,
+                    'nombre' => $row->nombre,
+                    'foto'=> $row->foto
        							);
-       		$this->session->set_userdata('logged_in', $sess_array);
+       		$this->session->set_userdata($sess_array);
      		}
      		return TRUE;
    		}
@@ -61,7 +64,7 @@ class Login extends CI_Controller {
 
 	 function logout()
  	 {
-   		$this->session->unset_userdata('logged_in');
+   		$this->session->unset_userdata();
    		session_destroy();
    		redirect('login');
  	 }

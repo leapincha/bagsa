@@ -23,11 +23,11 @@
   <body class="login-page">
     <div class="login-box">
       <div class="login-logo">
-        <a href="../../index2.html"><b>Buenos Aires Gas </b>S.A.</a>
+        <a href="http://www.bagsa.com.ar" target="_blank"><b>Buenos Aires Gas </b>S.A.</a>
       </div><!-- /.login-logo -->
       <div class="login-box-body">
         <p class="login-box-msg">Log In</p>
-        <?php echo validation_errors(); ?>
+        <?php echo my_validation_errors(validation_errors()); ?>
         <?php echo form_open('login'); ?>
           <div class="form-group has-feedback">
             <input type="user" class="form-control" placeholder="Usuario" name="username" id="username" value="<?php echo set_value('username'); ?>"/>
