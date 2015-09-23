@@ -23,14 +23,71 @@ scratch. This page gets rid of all links and provides the needed markup only.
           page. However, you can choose any other skin. Make sure you
           apply the skin class to the body tag so the changes take effect.
     -->
-    <link href="<?php echo base_url() .'assets/css/skins/skin-blue.min.css'?>" rel="stylesheet" type="text/css" />
+    <link href="<?php echo base_url() .'assets/css/skins/skin-yellow.min.css'?>" rel="stylesheet" type="text/css" />
+    <link href="<?php echo base_url() .'assets/css/style.css'?>" rel="stylesheet" type="text/css" />
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
         <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
         <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+
+
     <![endif]-->
+    <script src="<?php echo base_url() .'assets/plugins/jQuery/jQuery-2.1.4.min.js'?>"></script>
+    <!-- Bootstrap 3.3.2 JS -->
+    <script src="<?php echo base_url() .'assets/js/bootstrap.min.js'?>" type="text/javascript"></script>
+    <!-- AdminLTE App -->
+    <script src="<?php echo base_url() .'assets/plugins/fastclick/fastclick.min.js'?>"></script>
+    <script src="<?php echo base_url() .'assets//js/app.min.js'?>" type="text/javascript"></script>
+    <script src="<?php echo base_url() .'assets/js/demo.js'?>" type="text/javascript"></script>
+
+        <!-- DATA TABES SCRIPT -->
+    <script src="<?php echo base_url() .'assets/plugins/datatables/jquery.dataTables.min.js'?>" type="text/javascript"></script>
+    <script src="<?php echo base_url() .'assets/plugins/datatables/dataTables.bootstrap.min.js'?>" type="text/javascript"></script>
+    <!-- SlimScroll -->
+    <script src="<?php echo base_url() .'assets/plugins/slimScroll/jquery.slimscroll.min.js'?>" type="text/javascript"></script>
+    <!-- FastClick -->
+    
+    <script src="http://maps.google.com/maps/api/js?sensor=false"></script>
+
+
+    <!-- page script -->
+    <script type="text/javascript">
+      $(function () {
+        $("#example1").dataTable();
+       
+      });
+
+
+              $(document).ready(function() {
+  var oTable = $('#big_table').dataTable( {
+    "bProcessing": true,
+    "bServerSide": true,
+    "sAjaxSource": '<?php echo base_url(); ?>usuario/datatable',
+                "bJQueryUI": true,
+                "sPaginationType": "full_numbers",
+                "iDisplayStart ": 20,
+                "oLanguage": {
+            "sProcessing": "<img src='<?php echo base_url(); ?>assets/images/ajax-loader_dark.gif'>"
+        },  
+        "fnInitComplete": function() {
+                //oTable.fnAdjustColumnSizing();
+         },
+                'fnServerData': function(sSource, aoData, fnCallback)
+            {
+              $.ajax
+              ({
+                'dataType': 'json',
+                'type'    : 'POST',
+                'url'     : sSource,
+                'data'    : aoData,
+                'success' : fnCallback
+              });
+            }
+  } );
+} );
+    </script>
   </head>
   <!--
   BODY TAG OPTIONS:
@@ -52,7 +109,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   |               | sidebar-mini                            |
   |---------------------------------------------------------|
   -->
-  <body class="skin-blue sidebar-mini">
+  <body class="skin-yellow sidebar-mini">
     <div class="wrapper">
 
       <!-- Main Header -->
@@ -61,9 +118,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <!-- Logo -->
         <a href="index2.html" class="logo">
           <!-- mini logo for sidebar mini 50x50 pixels -->
-          <span class="logo-mini"><b></b></span>
+          <span class="logo-mini">  <img src="/assets/images/logo_bagsa_chico.jpg" class="img-responsive logo-bagsa"></span>
           <!-- logo for regular state and mobile devices -->
-          <span class="logo-lg"><b>BAGSA</b></span>
+          <span class="logo-lg"><img src="/assets/images/logo_bagsa_1.jpg" class="img-responsive logo-bagsa"></span>
         </a>
 
         <!-- Header Navbar -->

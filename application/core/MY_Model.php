@@ -17,22 +17,26 @@ class MY_Model extends CI_Model
         if (empty($this->table))
         {
             $this->error = $this->error_message_empty_table;
+            echo "Entra";
             return FALSE;
         }
 
         if (is_array($data) AND count($data)>0)
         {
             $result =  $this->db->insert($this->table, $data);
+            
 
             if ($result)
             {
+                
+                
                 return $this->db->insert_id();
             }
             $this->error = mysql_error();
         }
 
         $this->error = empty($this->error) ? 'No data passed' : $this->error;
-
+        
         return FALSE;
     }
 
@@ -359,7 +363,8 @@ class MY_Model extends CI_Model
         return false;
     }
 
-    function update($field_id = NULL, $id = NULL, $data = NULL)
+
+    function update($id = NULL, $data = NULL)
     {
         if (empty($this->table))
         {
@@ -367,16 +372,12 @@ class MY_Model extends CI_Model
             return FALSE;
         }
 
-        $this->db->where("$field_id", $id);
-        $this->db->update($this->table, $data);
-
-        if (($id != NULL) AND (is_numeric($id)) AND (is_array($data)) AND (count($data)>0) )
+        $this->db->where('id', $id);
+        $result = $this->db->update($this->table, $data);
+        
+        if ($result)
         {
-            $result = $this->db->update($this->table, $data, "$field_id = $id");
-            if ($result)
-            {
-                return TRUE;
-            }
+            return TRUE;
         }
 
         $this->error = 'Invalid ID.';

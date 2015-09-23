@@ -6,58 +6,149 @@ class Usuario extends MY_Controller {
 	function __construct() {
 		parent::__construct();
 		$this->load->model("user");
-		$this->load->library('Datatables');
-        $this->load->library('table');
-        $this->load->helper('datatables');
+		$this->load->model("gerencia");
+        $this->load->model("rol");
+        $this->output->enable_profiler(TRUE);
+       
 
 		
 	}
 
 	public function index()
 	{
-		$data['active'] = "usuario";
-        $data['sub_active'] = "";
+		$data['active'] = "administrador";
+        $data['sub_active'] = "usuario";
+
+        $data['usuarios'] = $this->user->get_list("id_usuario", "ASC");
         
 
-        $data['usuarios']= $this->user->read("id_user, nombre, username,foto",'id_user','ASC');
+        //$data['usuarios']= $this->user->read("id_user, nombre, username,foto, mail",'id_user','ASC');
         
         
-		$this->display("listado-usuarios",$data);
+		$this->display("usuarios/listado-usuarios",$data);
 	}
 
-	public function tabla()
-	{
-		$data['active'] = "usuario";
-        $data['sub_active'] = "";
-		$tmpl = array ( 'table_open'  => '<table id="big_table" border="1" cellpadding="2" cellspacing="1" class="table table-bordered table-hover">' );
-        $this->table->set_template($tmpl); 
-        //Head de la tabla
-        $this->table->set_heading('Nombre','Nombre de Usuario','Email','Foto','Acciones');
-
-        $this->display('usuarios_prueba',$data);
-	}
-
-	function datatable()
+	
+    public function agregar()
     {
-    	//Campos Base de datos
-        $this->datatables->select('id_user,nombre,username,mail,foto')
-        ->unset_column('id_user')
-        ->unset_column('foto')
-        ->add_column('foto', '<img src="/assets/images/users/$1"/>','foto')
-        ->add_column('Acciones', get_buttons('$1'),'id_user')
-        ->from('users');
+
+
+
+    	$data['roles'] = $this->rol->read('id_rol, rol', 'rol', 'ASC');
+
+		$data['active'] = "administrador";
+        $data['sub_active'] = "usuario";
+
+        $this->form_validation->set_error_delimiters('<li> ', '</li>');
         
-        echo $this->datatables->generate();
+        $this->form_validation->set_rules('username', 'Usuario', 'required|trim|is_unique[users.username]');
+        $this->form_validation->set_message('is_unique', 'El usuario ya existe');
+        $this->form_validation->set_rules('nombre', 'Nombre y Apellido', 'required');
+        $this->form_validation->set_rules('password', 'Password', 'required');
+        $this->form_validation->set_rules('id_rol', 'Rol', 'required');
+        $this->form_validation->set_rules('email', 'E-Mail', 'required|trim|valid_email');
+
+
+   		if(empty($_FILES['imagen']['tmp_name'])){
+   			$this->form_validation->set_rules('imagen', 'Imagen', 'required');
+   		} else{
+            $imagen=$_FILES['imagen']['name'];
+            echo $imagen;
+        }
+
+        if ($this->form_validation->run()) {
+
+        	$config['upload_path'] = './assets/images/users/';
+           	$config['allowed_types'] = 'gif|jpg|png';
+			$config['max_size'] = '100';
+			$config['max_width'] = '1024';
+			$config['max_height'] = '768';
+        	$this->load->library('upload', $config);
+        	
+            
+            
+        	if (!$this->upload->do_upload('imagen')){
+        		
+        		$error = array('error' => $this->upload->display_errors());
+        		
+        	} else {
+
+                $datos_imagen = array('upload_data' => $this->upload->data());
+                $nombre_archivo = $datos_imagen['upload_data']['file_name'];
+                echo $nombre_archivo;
+                
+        		
+        	}
+
+            $post = array("username" => $this->input->post('username'),"foto" => $nombre_archivo,
+                          "nombre" => $this->input->post('nombre'), "password" => $this->input->post('password'), 
+                          "id_rol" => $this->input->post('id_rol'),  
+                          "mail" => $this->input->post('email'));
+
+            print_r($post);
+
+               
+            $res = $this->user->create($post);
+
+            
+            if($res){
+                redirect("usuario");
+            }
+                
+            
+            
+        }
+
+        $this->display("usuarios/agregar", $data);
+
+
     }
 
-	public function editar($id)
+	public function editar($id_usuario = '')
 	{
-		echo "Entra editar";
+		$usuario = $this->user->get_user($id_usuario);
+    
+        $data = object2array($usuario);
+        $data['id_usuario'] = $id_usuario;
+        $data['active'] = "administrador";
+        $data['sub_active'] = "usuario";
+
+        $data['roles'] = $this->rol->read('id_rol, rol', 'rol', 'ASC');
+
+
+        $this->form_validation->set_error_delimiters('<li> ', '</li>');
+        
+        $this->form_validation->set_rules('username', 'Usuario', 'required|trim');
+        $this->form_validation->set_message('is_unique', 'El usuario ya existe');
+        $this->form_validation->set_rules('nombre', 'Nombre y Apellido', 'required');
+        $this->form_validation->set_rules('password', 'Password', 'required');
+        $this->form_validation->set_rules('id_rol', 'Rol', 'required');
+        $this->form_validation->set_rules('email', 'E-Mail', 'required|trim|valid_email');
+
+
+        if ($this->form_validation->run()) {
+                        $post = array("username" => $this->input->post('username'),"foto" => $nombre_archivo,
+                                "nombre" => $this->input->post('nombre'), "password" => $this->input->post('password'), 
+                                "id_rol" => $this->input->post('id_rol'),  
+                                "mail" => $this->input->post('email'));
+
+            $result = $this->user->update($id_usuario, $post);
+
+            if ($result) {
+                redirect("usuario");
+            }
+        }
+
+        $this->display("usuarios/editar", $data);
+
 	}
 
-	public function eliminar($id)
+	public function eliminar($id_usuario)
 	{
-		echo "Entra eliminar";
+		$result = $this->user->delete("id_usuario",$id_usuario);        
+
+        echo json_encode($result);
 	}
+
 
 }

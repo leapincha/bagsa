@@ -5,29 +5,22 @@
         <section class="sidebar">
 
 
-          <!-- search form (Optional) -->
-          <form action="#" method="get" class="sidebar-form">
-            <div class="input-group">
-              <input type="text" name="q" class="form-control" placeholder="Search..."/>
-              <span class="input-group-btn">
-                <button type='submit' name='search' id='search-btn' class="btn btn-flat"><i class="fa fa-search"></i></button>
-              </span>
-            </div>
-          </form>
-          <!-- /.search form -->
+
 
           <!-- Sidebar Menu -->
           <ul class="sidebar-menu">
             <li class="header">MENU</li>
             <!-- Optionally, you can add icons to the links -->
-            <li class="treeview active">
+            <li class="treeview <?= ($active == "administrador") ? "active" : "" ?>">
               <a href="#"><i class='fa fa-cog'></i> <span>Administrador</span> <i class="fa fa-angle-left pull-right"></i></a>
               <ul class="treeview-menu">
-                <li><a href="<?= base_url(); ?>usuario"><i class='fa fa-users'></i>Usuarios</a></li>                
+                <li class="<?= ($sub_active == "usuario") ? "active" : "" ?>"><a href="<?= base_url(); ?>usuario"><i class='fa fa-users'></i>Usuarios</a></li>                
               </ul>
             </li>
             
-            <li><a href="#"><i class='fa fa-link'></i> <span>Another Link</span></a></li>
+            <li class="<?= ($active == "regional") ? "treeview active" : "" ?>"><a href="<?= base_url(); ?>regional"><i class='fa fa-globe'></i> <span>Regionales</span></a></li>
+            <li class="<?= ($active == "uo") ? "treeview active" : "" ?>"><a href="<?= base_url(); ?>uo"><i class='fa fa-th'></i> <span>UO</span></a></li>
+            <li class="<?= ($active == "localidades") ? "treeview active" : "" ?>"><a href="<?= base_url(); ?>localidad"><i class='fa fa-sitemap'></i> <span>Localidades</span></a></li>
             <li class="treeview">
               <a href="#"><i class='fa fa-link'></i> <span>Localidades</span> <i class="fa fa-angle-left pull-right"></i></a>
               <ul class="treeview-menu">
