@@ -71,7 +71,7 @@ class Uo extends MY_Controller {
 	public function editar($id_uo = '')
 	{
 
-		$uo = $this->regionales->get_unidad($id_uo);
+		$uo = $this->unidad->get_unidad($id_uo);
 
 		$data = object2array($uo);
         $data['id_uo'] = $id_uo;

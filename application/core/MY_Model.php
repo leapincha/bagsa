@@ -364,7 +364,7 @@ class MY_Model extends CI_Model
     }
 
 
-    function update($id = NULL, $data = NULL)
+        function update($field_id = NULL, $id = NULL, $data = NULL)
     {
         if (empty($this->table))
         {
@@ -372,17 +372,22 @@ class MY_Model extends CI_Model
             return FALSE;
         }
 
-        $this->db->where('id', $id);
-        $result = $this->db->update($this->table, $data);
-        
-        if ($result)
+        $this->db->where("$field_id", $id);
+        $this->db->update($this->table, $data);
+
+        if (($id != NULL) AND (is_numeric($id)) AND (is_array($data)) AND (count($data)>0) )
         {
-            return TRUE;
+            $result = $this->db->update($this->table, $data, "$field_id = $id");
+            if ($result)
+            {
+                return TRUE;
+            }
         }
 
         $this->error = 'Invalid ID.';
         return FALSE;
     }
+
 
     function delete($field_id = NULL, $id = NULL)
     {

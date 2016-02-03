@@ -7,11 +7,16 @@
   function eliminar() {
       $.ajax({
           url: '/usuario/eliminar/' + $('#id_usuario').val(),
-          dataType: 'json'
-      }).done(function(data) {
-          window.top.location = '/usuario';
-      });
+          type: "POST",
+          error: function(){
+          alert("Error envio de datos");
+            },
+          success: function(data){
+            window.top.location = '/usuario';
+            }
+          });
   }
+  
 
   $(function () { $('#example2').dataTable({
           "bPaginate": true,
@@ -50,7 +55,7 @@
         <section class="content">
           <div class="row">
             <div class="col-xs-2">
-            <a href="/usuario/agregar" class="btn btn-block btn-primary btn-flat btn-md">Agregar Usuario</a><br />
+            <a href="<?= base_url(); ?>usuario/agregar" class="btn btn-block btn-primary btn-flat btn-md">Agregar Usuario</a><br />
             </div>
           </div>
            <!-- Main content -->
@@ -81,9 +86,9 @@
                                 <td><?php echo $data->username; ?></td>
                                 <td><?php echo $data->mail; ?></td>
                                 <td><?php echo $data->rol; ?></td>
-                                <td><img src="/assets/images/users/<?php echo $data->foto; ?>" class="user-image" alt="User Image"></td>
+                                <td><img src="<?= base_url(); ?>assets/images/users/<?php echo $data->foto; ?>" class="user-image" alt="User Image"></td>
                                 <td>
-                                    <a href="/usuario/editar/<?= $data->id_usuario ?>" class="btn btn-flat btn-success btn-xs">Editar</a>
+                                    <a href="<?= base_url(); ?>usuario/editar/<?= $data->id_usuario ?>" class="btn btn-flat btn-success btn-xs">Editar</a>
                                     <button class="btn btn-flat btn-danger btn-xs eliminarModal" data-toggle="modal" data-id="<?= $data->id_usuario ?>" data-usuario="<?= $data->username ?>" data-target="#eliminar">Borrar</a>
                                 </td>
                             </tr>

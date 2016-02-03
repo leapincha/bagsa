@@ -23,7 +23,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
           page. However, you can choose any other skin. Make sure you
           apply the skin class to the body tag so the changes take effect.
     -->
-    <link href="<?php echo base_url() .'assets/css/skins/skin-yellow.min.css'?>" rel="stylesheet" type="text/css" />
+    <link href="<?php echo base_url() .'assets/css/skins/skin-blue.min.css'?>" rel="stylesheet" type="text/css" />
     <link href="<?php echo base_url() .'assets/css/style.css'?>" rel="stylesheet" type="text/css" />
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -47,7 +47,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <script src="<?php echo base_url() .'assets/plugins/datatables/dataTables.bootstrap.min.js'?>" type="text/javascript"></script>
     <!-- SlimScroll -->
     <script src="<?php echo base_url() .'assets/plugins/slimScroll/jquery.slimscroll.min.js'?>" type="text/javascript"></script>
-    <!-- FastClick -->
+    <!-- Bootstrap notify -->
+    <script src="<?php echo base_url() .'assets/js/bootstrap-notify.min.js'?>" type="text/javascript"></script>
     
     <script src="http://maps.google.com/maps/api/js?sensor=false"></script>
 
@@ -109,7 +110,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   |               | sidebar-mini                            |
   |---------------------------------------------------------|
   -->
-  <body class="skin-yellow sidebar-mini">
+  <body class="skin-blue sidebar-mini">
     <div class="wrapper">
 
       <!-- Main Header -->

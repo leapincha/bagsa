@@ -34,7 +34,7 @@ $(function () { $('#example2').dataTable({
         <section class="content">
           <div class="row">
             <div class="col-xs-2">
-            <a href="/localidad/agregar" class="btn btn-block btn-primary btn-flat btn-md">Agregar Localidad</a><br />
+            <a href="<?= base_url(); ?>localidad/agregar" class="btn btn-block btn-primary btn-flat btn-md">Agregar Localidad</a><br />
             </div>
           </div>
            <!-- Main content -->
@@ -63,8 +63,8 @@ $(function () { $('#example2').dataTable({
                                 <td><?php echo $data->unidad_operativa; ?></td>
                                 <td><?php echo $data->regional; ?></td>
                                 <td>
-                                    <a href="/localidad/editar/<?= $data->id ?>" class="btn btn-flat btn-success btn-xs">Editar</a>
-                                    <a href="/localidad/panel/<?= $data->id ?>" class="btn btn-flat btn-info btn-md"><i class='fa fa-search'></i><span> Panel de Control</span></a>
+                                    <a href="<?= base_url(); ?>localidad/editar/<?= $data->id ?>" class="btn btn-flat btn-success btn-xs">Editar</a>
+                                    <a href="<?= base_url(); ?>localidad/panel/<?= $data->id ?>" class="btn btn-flat btn-info btn-md"><i class='fa fa-search'></i><span> Panel de Control</span></a>
                                 </td>
                             </tr>
 

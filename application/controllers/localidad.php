@@ -6,7 +6,9 @@ class Localidad extends MY_Controller {
 	function __construct() {
 		parent::__construct();
 		$this->load->model("localidades");
-        $this->load->model("personal");
+        $this->load->model("tipo_personal");
+
+        
 
         $this->output->enable_profiler(TRUE);
        
@@ -102,11 +104,23 @@ class Localidad extends MY_Controller {
 
     public function panel($id_localidad = '')
     {
+
+        $this->load->model("personal_loc");
+        $this->load->model("excavadores");
+        $this->load->model("ubicacion");
+        $this->load->model("imagenes");
         $data['active'] = "localidades";
         $data['sub_active'] = "";
+        $data['id_locali'] = $id_localidad;
 
         $data['locali'] = $this->localidades->get_localidad($id_localidad);
-        //$data['personal'] = $this->personal->get_localidad($id_localidad);
+        $data['personas'] = $this->personal_loc->get_personal($id_localidad);
+        $data['excavador'] = $this->excavadores->get_excavador($id_localidad);
+        $data['ubic']= $this->ubicacion->get_ubicacion($id_localidad);
+        $data['tipo_pers']= $this->tipo_personal->read("id,tipo","id","ASC");
+        $data['image'] = $this->imagenes->get_imagenes($id_localidad);
+
+        
 
         //print_r($data);
 

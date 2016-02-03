@@ -9,51 +9,23 @@
 
     
     </style>
+<script src="<?php echo base_url() .'assets/js/angular.min.js'?>" type="text/javascript"></script>
+<script src="<?php echo base_url() .'assets/js/panel.js'?>" type="text/javascript"></script>
 
-
-<script type="text/javascript">
-
-jQuery(function ($) {
-        
-       // init_map1();
-    });
-
-
-
-$(document).ready(function() {
-  function init_map1() {
-            var lat=$("#map1").data("latitud");
-            var longi=$("#map1").data("longitud");
-            //alert("Latitud="+lat+" Longitud= "+longi);
-            var myLocation = new google.maps.LatLng(lat, longi);
-            var mapOptions = {
-                center: myLocation,
-                zoom: 10
-            };
-            var marker = new google.maps.Marker({
-                position: myLocation,
-                title: "Property Location"
-            });
-            var map = new google.maps.Map(document.getElementById("map1"),
-                mapOptions);
-            marker.setMap(map);
-        }
-
-  init_map1();
-});
-
-</script>
 
       <!-- Content Wrapper. Contains page content -->
       <div class="content-wrapper">
         <!-- Content Header (Page header) -->
         <section class="content-header">
           <h1>
+            
             <p><?php echo $locali->nombre; ?></p>
             <small>Unidad Operativa: <?php echo $locali->nombre_unidad; ?> /</small>
             <small>Regional: <?php echo $locali->nombre_regional; ?> /</small>
             <small>Responsable Regional: <?php echo $locali->responsable_regional; ?></small>            
           </h1>
+          <p></p>
+          <button type="button" class="btn btn-warning" ><i class="fa fa-book"></i>  Gestor de Documentos</button>
           <ol class="breadcrumb">
             <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
             <li><a href="<?= base_url(); ?>localidad">Localidades</a></li>
@@ -61,13 +33,14 @@ $(document).ready(function() {
           </ol>
         </section>
 
+
         <!-- Main content -->
         <section class="content">
           <!-- COLOR PALETTE -->
           
           <!-- START CUSTOM TABS -->
          
-
+          <center><div id="result"></div></center>
           <div class="row">
             <div class="col-md-6">
               <!-- Custom Tabs -->
@@ -77,85 +50,487 @@ $(document).ready(function() {
                   <li><a href="#tab_2" data-toggle="tab">Personal</a></li>
                   <li><a href="#tab_3" data-toggle="tab">Datos Técnicos</a></li>
                   <li><a href="#tab_4" data-toggle="tab">Planta</a></li>
-                  <li class="pull-right"><a href="#" class="text-muted"><i class="fa fa-gear"></i></a></li>
+
+                  
                 </ul>
                 <div class="tab-content">
                   <div class="tab-pane active" id="tab_1">
-                    <p><label>Usuarios Potenciales: </label> <?php echo $locali->potenciales; ?></p>
-                    <p><label>Cantidad de Usuarios: </label> <?php echo $locali->usuarios; ?></p>
-                    
+                    <dl class="dl-horizontal">
+                      <dt>Oficina</dt><dd>Tel: <?php echo $locali->tel_oficina; ?></dd><dd>Dirección: <?php echo $locali->direc_oficina; ?></dd>
+                      <dt>Cooperativa</dt><dd>Tel: <?php echo $locali->tel_cooperativa; ?></dd><dd>Dirección: <?php echo $locali->direc_cooperativa; ?></dd>
+                      <dt>Bombero</dt><dd><?php echo $locali->bombero; ?></dd>
+                      <dt>Policía</dt><dd><?php echo $locali->policia; ?></dd>
+                      <dt>Defensa Civil</dt><dd><?php echo $locali->defensa_civil; ?></dd>
+                    </dl>
+                    <div class="box-footer clearfix">
+                      <a class="btn btn-sm btn-default btn-flat pull-left edit-gen" data-toggle="modal" data-target="#edit-generales">Editar Datos Generales</a>
+                    </div>            
                   </div><!-- /.tab-pane -->
                   <div class="tab-pane" id="tab_2">
-                    The European languages are members of the same family. Their separate existence is a myth.
-                    For science, music, sport, etc, Europe uses the same vocabulary. The languages only differ
-                    in their grammar, their pronunciation and their most common words. Everyone realizes why a
-                    new common language would be desirable: one could refuse to pay expensive translators. To
-                    achieve this, it would be necessary to have uniform grammar, pronunciation and more common
-                    words. If several languages coalesce, the grammar of the resulting language is more simple
-                    and regular than that of the individual languages.
+
+                   <?php  foreach($personas as $pers) { ?>
+                          <dl class="dl-horizontal">
+
+                            <dt><i class="fa fa-user"></i> <?php echo $pers->tipo; ?></dt>
+                            <dd><?php echo $pers->nombre_apellido; ?></dd>
+                            <dd>Tel: <?php echo $pers->telefono; ?></dd>
+
+                          </dl>
+
+
+                  <?php } ?>
+                    <div class="box-footer clearfix">
+                      <a class="btn btn-sm btn-primary btn-flat pull-left" data-toggle="modal" data-target="#personal">Agregar Nuevo Personal</a>
+                      <a class="btn btn-sm btn-default btn-flat pull-right edit-pers" data-toggle="modal" data-target="#edit-personal">Editar Personal</a>
+
+                    </div>
                   </div><!-- /.tab-pane -->
                   <div class="tab-pane" id="tab_3">
-                    The European languages are members of the same family. Their separate existence is a myth.
-                    For science, music, sport, etc, Europe uses the same vocabulary. The languages only differ
-                    in their grammar, their pronunciation and their most common words. Everyone realizes why a
-                    new common language would be desirable: one could refuse to pay expensive translators. To
-                    achieve this, it would be necessary to have uniform grammar, pronunciation and more common
-                    words. If several languages coalesce, the grammar of the resulting language is more simple
-                    and regular than that of the individual languages.
+                    <dl class="dl-horizontal">
+                      <dt>Usuarios Potenciales</dt><dd><?php echo $locali->potenciales; ?></dd>
+                      <dt>Cantidad de Usuarios</dt><dd><?php echo $locali->usuarios; ?></dd>
+                      <dt>Red</dt><dd><?php echo $locali->nombre_red; ?> </dd>
+                      <dt>Longitud de red (m)</dt><dd><?php echo $locali->long_red; ?> </dd>
+                      <dt>Cantidad de radios</dt><dd><?php echo $locali->cant_radios; ?> </dd>
+                      <dt>Cantidad de válvulas</dt><dd><?php echo $locali->cant_valvulas; ?> </dd>
+                    </dl>
+                    <div class="box-footer clearfix">
+                      <a class="btn btn-sm btn-default btn-flat pull-left edit-tec" data-toggle="modal" data-target="#edit-tecnicos">Editar Datos Técnicos</a>
+                    </div>
                   </div><!-- /.tab-pane -->
                   <div class="tab-pane" id="tab_4">
-                    Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                    Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
-                    when an unknown printer took a galley of type and scrambled it to make a type specimen book.
-                    It has survived not only five centuries, but also the leap into electronic typesetting,
-                    remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset
-                    sheets containing Lorem Ipsum passages, and more recently with desktop publishing software
-                    like Aldus PageMaker including versions of Lorem Ipsum.
+                    <dl class="dl-horizontal">
+                      <dt>Tanques</dt>
+                      <dd><?php echo $locali->cant_tanques; ?> </dd>
+                      <dt>Vaporizadores</dt>
+                      <dd><?php echo $locali->cant_vapo; ?> </dd>
+                      <dt>Distribución</dt>
+                      <dd><?php echo $locali->capac_dist; ?> </dd>
+                      <dt>Almacenaje</dt>
+                      <dd><?php echo $locali->capac_almacenaje; ?> </dd>
+                    </dl>
+                    <div class="box-footer clearfix">
+                      <a class="btn btn-sm btn-default btn-flat pull-left edit-pla" data-toggle="modal" data-target="#edit-planta">Editar Datos Planta</a>
+                    </div>
                   </div><!-- /.tab-pane -->
                 </div><!-- /.tab-content -->
               </div><!-- nav-tabs-custom -->
 
-              <div class="box box-solid">
+              <!-- /.Modal-editar Datos Generales-->
+                <div class="modal fade" id="edit-generales" role="dialog" tabindex="-1">
+                  <div class="modal-dialog">
+                    <div class="modal-content panel-info">
+                      <div class="modal-header panel-heading">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar"><span aria-hidden="true">×</span></button>
+                        <h4 class="modal-title">Editar Datos Generales - <?php echo $locali->nombre; ?> </h4>
+                      </div>
+                      <form id="edit-generales" method="POST" class="form-horizontal">
+                        <div class="box-body">
+                          <input type="hidden" id="id_localidad" value="<?php echo $id_locali; ?>" />
+                                      
+                          <div id="id_general">
+
+
+                          </div>
+    
+                   
+
+                        </div>
+
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                          <button type="submit" class="btn btn-primary">Editar</button>
+                        </div>
+                      </form>
+                    </div><!-- /.modal-content -->
+                  </div><!-- /.modal-dialog -->
+                </div>
+
+                <!-- /.Modal-editar Datos Tecnicos-->
+                <div class="modal fade" id="edit-tecnicos" role="dialog" tabindex="-1">
+                  <div class="modal-dialog">
+                    <div class="modal-content panel-info">
+                      <div class="modal-header panel-heading">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar"><span aria-hidden="true">×</span></button>
+                        <h4 class="modal-title">Editar Datos Técnicos - <?php echo $locali->nombre; ?> </h4>
+                      </div>
+                      <form id="editar-tecnicos" method="POST" class="form-horizontal">
+                        <div class="box-body">
+                          <input type="hidden" id="id_localidad" value="<?php echo $id_locali; ?>" />
+                                      
+                          <div id="id_tecnicos">
+
+
+                          </div>
+    
+                   
+
+                        </div>
+
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                          <button type="submit" class="btn btn-primary">Editar</button>
+                        </div>
+                      </form>
+                    </div><!-- /.modal-content -->
+                  </div><!-- /.modal-dialog -->
+                </div>
+
+
+                <!-- /.Modal-editar Datos Planta-->
+                <div class="modal fade" id="edit-planta" role="dialog" tabindex="-1">
+                  <div class="modal-dialog">
+                    <div class="modal-content panel-info">
+                      <div class="modal-header panel-heading">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar"><span aria-hidden="true">×</span></button>
+                        <h4 class="modal-title">Editar Datos Planta - <?php echo $locali->nombre; ?> </h4>
+                      </div>
+                      <form id="editar-planta" method="POST" class="form-horizontal">
+                        <div class="box-body">
+                          <input type="hidden" id="id_localidad" value="<?php echo $id_locali; ?>" />
+                                      
+                          <div id="id_planta">
+
+
+                          </div>
+    
+                   
+
+                        </div>
+
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                          <button type="submit" class="btn btn-primary">Editar</button>
+                        </div>
+                      </form>
+                    </div><!-- /.modal-content -->
+                  </div><!-- /.modal-dialog -->
+                </div>
+               
+
+              <!-- /.Modal-Agregar personal-->
+                <div class="modal fade" id="personal" role="dialog" tabindex="-1">
+                  <div class="modal-dialog">
+                    <div class="modal-content panel-info">
+                      <div class="modal-header panel-heading">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar"><span aria-hidden="true">×</span></button>
+                        <h4 class="modal-title">Agregar Personal - <?php echo $locali->nombre; ?> </h4>
+                      </div>
+                      <form id="agregar-personal" method="POST">
+                        <div class="modal-body">
+                        
+                          <input type="hidden" id="id_localidad" value="<?php echo $id_locali; ?>" />
+                          <div class="form-group">
+                            <label for="nom">Nombre y Apellido</label><br>
+                            <input name="nom" id="nom_pers" class="form-control" type="text" required>
+                          </div>
+                          <div class="form-group">
+                            <label for="nom">Tipo</label><br>
+                            <select id="id_tipo" name="id_tipo" class="form-control" required>
+                              <option value="">Seleccionar Tipo</option>
+                                <? foreach($tipo_pers as $tip) { ?>
+                                <option value="<?= $tip->id ?>" <?= set_select('id', $tip->id); ?>><?= $tip->tipo ?></option>
+                                <? } ?>
+                            </select>
+                            
+                          </div>                          
+                          <div class="form-group">
+                            <label for="tel">Teléfono</label><br>
+                            <input name="tel" id="tel_pers" class="form-control" type="text" required>
+                          </div>        
+                   
+
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                          <button type="submit" class="btn btn-primary">Agregar</button>
+                        </div>
+                      </form>
+                    </div><!-- /.modal-content -->
+                  </div><!-- /.modal-dialog -->
+                </div>
+                <!-- Termina agregar personal-->
+
+              <!-- /.Modal-Editarpersonal-->
+                <div class="modal fade" id="edit-personal" role="dialog" tabindex="-1">
+                  <div class="modal-dialog">
+                    <div class="modal-content panel-info">
+                      <div class="modal-header panel-heading">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar"><span aria-hidden="true">×</span></button>
+                        <h4 class="modal-title">Editar Personal - <?php echo $locali->nombre; ?> </h4>
+                      </div>
+                      
+
+                          <div id="id_personal">
+                            
+                          </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                        </div>
+                      
+                    </div><!-- /.modal-content -->
+                  </div><!-- /.modal-dialog -->
+                </div>
+                 <!-- Termina editar personal-->
+                 <!-- Eliminar personal-->
+                <div class="modal fade" id="eliminar-personal" role="dialog" tabindex="-1">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar"><span aria-hidden="true">×</span></button>
+                          <h4 class="modal-title">Eliminar Personal</h4>
+                      </div>
+                      <div class="modal-body">
+                        <input type="hidden" id="id_localidad" value="<?php echo $id_locali; ?>" />
+                        <input type="hidden" id="id_personal" value="" />
+                        <p>Está seguro que desea eliminar el personal <span id="persona"></span>?</p>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-danger" onclick="eliminar_personal();">Aceptar</button>
+                      </div>
+                    </div><!-- /.modal-content -->
+                  </div><!-- /.modal-dialog -->
+                </div>
+
+
+              <div class="box box-warning">
+                <div class="box-header">
+                  <h3 class="box-title">Excavadores</h3>
+                </div>
+                <div class="box-body no-padding">
+                 <div id="excavador-cargar excavador-limpiar">
+                </div>
+                  <table class="table table-striped">
+                    <tbody>
+                      <tr>
+                        <th>#</th>
+                        <th>Nombre</th>
+                        <th>Teléfono</th>
+                        <th>Acciones</th>                        
+                      </tr>
+                    
+                  
+                    <?php 
+                        $i= 1;
+                          foreach ($excavador as $exca) { ?>
+                            <tr>
+                              <td><?php echo $i++; ?></td>
+                              <td><?php echo $exca->nombre; ?></td>
+                              <td><?php echo $exca->telefono; ?></td>
+                              <td>
+                                    <button href="" class="btn btn-flat btn-success btn-xs editarExcavador" data-toggle="modal" data-target="#editar-excavador" data-nomexc="<?= $exca->nombre; ?>" data-telexc="<?= $exca->telefono; ?>" data-id="<?= $exca->id; ?>">Editar</a>
+                                    <button href="" class="btn btn-flat btn-danger btn-xs eliminarExcavador" data-id="<?= $exca->id ?>" data-toggle="modal" data-target="#eliminar-excavador" data-exca="<?= $exca->nombre ?>">Borrar</a>
+                              </td>
+
+                            </tr>
+                    <?php } ?>
+
+                    
+                    </tbody>
+                  </table>
+
+                    <div class="box-footer clearfix">
+                      <a class="btn btn-sm btn-warning btn-flat pull-left" data-toggle="modal" data-target="#excavador">Agregar Nuevo Excavador</a>
+                      <!-- <a class="btn btn-sm btn-default btn-flat pull-right" href="">Listado de Excavadores</a> -->
+                    </div>
+                  
+                </div>
+              </div>
+                <!-- /.Modal-Agregar Excavador -->
+                <div class="modal fade" id="excavador" role="dialog" tabindex="-1">
+                  <div class="modal-dialog">
+                    <div class="modal-content panel-warning">
+                      <div class="modal-header panel-heading">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar"><span aria-hidden="true">×</span></button>
+                        <h4 class="modal-title">Agregar Excavador - <?php echo $locali->nombre; ?> </h4>
+                      </div>
+                      <form id="excavadores" method="POST">
+                        <div class="modal-body">
+                        
+                          <input type="hidden" id="id_localidad" value="<?php echo $id_locali; ?>" />
+                          <div class="form-group">
+                            <label for="nom">Nombre y Apellido</label><br>
+                            <input name="nom" id="nom_exc" class="form-control" type="text" required>
+                          </div>
+                          <div class="form-group">
+                            <label for="tel">Teléfono</label><br>
+                            <input name="tel" id="tel_exc" class="form-control" type="text" required>
+                          </div>        
+                   
+
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                          <button type="submit" class="btn btn-warning">Agregar</button>
+                        </div>
+                      </form>
+                    </div><!-- /.modal-content -->
+                  </div><!-- /.modal-dialog -->
+                </div>
+
+
+                <!-- /.Modal-Editar Excavador -->
+                <div class="modal fade" id="editar-excavador" role="dialog" tabindex="-1">
+                  <div class="modal-dialog">
+                    <div class="modal-content panel-warning">
+                      <div class="modal-header panel-heading">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar"><span aria-hidden="true">×</span></button>
+                        <h4 class="modal-title">Editar Excavador - <?php echo $locali->nombre; ?> - <span id="exca_ant"></span> </h4>
+                      </div>
+                      <form id="excavadores-edit" method="POST">
+                        <div class="modal-body">
+                        
+                          <input type="hidden" id="id_localidad" value="<?php echo $id_locali; ?>" />
+                          <input type="hidden" id="id_excavador" value="" />
+                          <div class="form-group">
+                            <label for="nom">Nombre y Apellido</label><br>
+                            <input name="nom" id="nombre" class="form-control" type="text" required>
+                          </div>
+                          <div class="form-group">
+                            <label for="tel">Teléfono</label><br>
+                            <input name="tel" id="tel" class="form-control" type="text" required>
+                          </div>        
+                   
+
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                          <button type="submit" class="btn btn-warning">Editar</button>
+                        </div>
+                      </form>
+                    </div><!-- /.modal-content -->
+                  </div><!-- /.modal-dialog -->
+                </div>
+
+                <!-- /.Modal-eliminar Excavador -->
+                <div class="modal fade" id="eliminar-excavador" role="dialog" tabindex="-1">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar"><span aria-hidden="true">×</span></button>
+                          <h4 class="modal-title">Eliminar Excavador</h4>
+                      </div>
+                      <div class="modal-body">
+                        <input type="hidden" id="id_localidad" value="<?php echo $id_locali; ?>" />
+                        <input type="hidden" id="id_excavador" value="" />
+                        <p>Está seguro que desea eliminar excavador <span id="excava"></span>?</p>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-danger" onclick="eliminar_excavador();">Aceptar</button>
+                      </div>
+                    </div><!-- /.modal-content -->
+                  </div><!-- /.modal-dialog -->
+                </div>
+
+
+            </div><!-- /.col -->
+
+
+
+             <div class="col-md-6">
+                            <!-- /.Editar Ubicación -->
+              <div class="modal fade" id="editar-ubicacion" role="dialog" tabindex="-1">
+                  <div class="modal-dialog">
+                    <div class="modal-content panel-danger">
+                      <div class="modal-header panel-heading">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar"><span aria-hidden="true">×</span></button>
+                        <h4 class="modal-title">Editar Ubicación- <?php echo $locali->nombre; ?><span id="exca_ant"></span> </h4>
+                      </div>
+                      <form id="ubicacion-edit" method="POST">
+                        <div class="modal-body">
+                        
+                          <input type="hidden" id="id_localidad" value="<?php echo $id_locali; ?>" />
+                          <input type="hidden" id="id_ubicacion" value="" />
+                          <div class="form-group">
+                            <label for="nom">Latitud</label><br>
+                            <input name="latitud" id="latitud" class="form-control" type="text" required>
+                          </div>
+                          <div class="form-group">
+                            <label for="tel">Longitud</label><br>
+                            <input name="longitud" id="longitud" class="form-control" type="text" required>
+                          </div>        
+                   
+
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                          <button type="submit" class="btn btn-danger">Editar</button>
+                        </div>
+                      </form>
+                    </div><!-- /.modal-content -->
+                  </div><!-- /.modal-dialog -->
+                </div>
+
+                <!-- /. Fin Editar Ubicación -->
+              <div class="box box-danger">
                 <div class="box-header with-border">
                   <i class="fa fa-map-marker"></i>
                   <h3 class="box-title">Ubicación de la Planta</h3>
+                <?php foreach ($ubic as $ub) { ?>
+                  <div class="box-tools">
+                      <button class="btn btn-box-tool editarUbicacion" data-toggle="modal" data-target="#editar-ubicacion" type="button" data-latitud="<?= $ub->latitud ?>" data-longitud="<?= $ub->longitud ?>" data-id="<?= $ub->id_ubicacion ?>">
+                        <i class="fa fa-cog"></i>
+                      </button>
+                  </div>                         
                 </div><!-- /.box-header -->
-                <div id="map1" class="map" data-latitud="<?= $locali->latitud ?>" data-longitud="<?= $locali->longitud ?>">
-                </div>
+
+                
+                  <div id="map1" class="map" data-latitud="<?= $ub->latitud ?>" data-longitud="<?= $ub->longitud ?>"></div>
+
+                <?php } ?>
+
               </div>
-            </div><!-- /.col -->
-             <div class="col-md-6">
-              <div class="box box-solid">
+
+
+
+
+                
+
+              <div class="box box-success">
                 <div class="box-header with-border">
                   <i class="fa fa-photo"></i>
-                  <h3 class="box-title">Fotos de la Planta</h3>
+                  <h3 class="box-title">Fotos de la Localidad</h3>
+                  <div class="box-tools">
+                      <button class="btn btn-box-tool edit-im" data-toggle="modal" data-target="#editar-imagenes" type="button" data-idloca="<?= $id_locali; ?>">
+                        <i class="fa fa-cog"></i>
+                      </button>
+                      <button class="btn btn-box-tool agreg-im" data-toggle="modal" data-target="#agregar-imagenes" type="button" data-idloca="<?= $id_locali; ?>">
+                        <i class="fa fa-plus"></i>
+                      </button>
+                  </div>  
+
                 </div><!-- /.box-header -->
                 <div class="box-body">
                   <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
                     <ol class="carousel-indicators">
-                      <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
-                      <li data-target="#carousel-example-generic" data-slide-to="1" class=""></li>
-                      <li data-target="#carousel-example-generic" data-slide-to="2" class=""></li>
-                    </ol>
+                  <?php
+                  for ($k = 0; $k < count($image); ++$k) { ?>                   
+                                          
+                      <li data-target="#carousel-example-generic" data-slide-to="<? echo $k-1; ?>" class="<? if($k == 1) { echo "active"; } else {echo "";} ?>"></li>
+
+                    
+                  <?php 
+                      
+                      } ?>
+                      </ol>
                     <div class="carousel-inner">
-                      <div class="item active">
-                        <img src="http://placehold.it/900x500/39CCCC/ffffff&text=I+Love+Bootstrap" alt="First slide">
-                        <div class="carousel-caption">
-                          First Slide
+
+                      <?php 
+                      $j= 0;
+                      foreach ($image as $im) { ?>
+                        <div class="item <? if($j == 0) echo "active"; ?>">
+                          <img src="/assets/images/fotos_planta/<?php echo $im->url_img; ?>">
+                          <div class="carousel-caption">
+                              <?php echo $im->descripcion; ?>
+                          </div>
                         </div>
-                      </div>
-                      <div class="item">
-                        <img src="http://placehold.it/900x500/3c8dbc/ffffff&text=I+Love+Bootstrap" alt="Second slide">
-                        <div class="carousel-caption">
-                          Second Slide
-                        </div>
-                      </div>
-                      <div class="item">
-                        <img src="http://placehold.it/900x500/f39c12/ffffff&text=I+Love+Bootstrap" alt="Third slide">
-                        <div class="carousel-caption">
-                          Third Slide
-                        </div>
-                      </div>
+                      <?php 
+                      $j++;
+                      } ?>
+
+
                     </div>
                     <a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">
                       <span class="fa fa-angle-left"></span>
@@ -165,407 +540,78 @@ $(document).ready(function() {
                     </a>
                   </div>
                 </div><!-- /.box-body -->
+
+               <!-- /.Editar Imagenes-->
+              <div class="modal fade" id="editar-imagenes" role="dialog" tabindex="-1">
+                  <div class="modal-dialog">
+                    <div class="modal-content panel-success">
+                      <div class="modal-header panel-heading">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar"><span aria-hidden="true">×</span></button>
+                        <h4 class="modal-title">Editar Imágenes - <?php echo $locali->nombre; ?><span id="exca_ant"></span> </h4>
+                      </div>
+                      <form id="imagenes-edit" method="POST">
+                        <div class="modal-body">
+                        
+
+                            <div id="id_imagen">
+
+                            </div>
+
+
+                       </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                          
+                        </div>
+                      </form>
+                    </div><!-- /.modal-content -->
+                  </div><!-- /.modal-dialog -->
+                </div>
+
+
+              <!-- /.Agregar Imagenes-->
+              <div class="modal fade" id="agregar-imagenes" role="dialog" tabindex="-1">
+                  <div class="modal-dialog">
+                    <div class="modal-content panel-success">
+                      <div class="modal-header panel-heading">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar"><span aria-hidden="true">×</span></button>
+                        <h4 class="modal-title">Agregar Imágenes - <?php echo $locali->nombre; ?></h4>
+                      </div>
+                      <form id="imagenes-agregar" method="POST" enctype="multipart/form-data">
+                        <div class="modal-body">
+                        
+                          <div class="form-group">
+                            <label for="archivo">Imagenes</label><br>
+                            <input name="archivo[]" type="file" multiple="multiple">
+                          </div>       
+
+
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                          <button type="submit" class="btn btn-success">Agregar</button>
+                        </div>
+                      </form>
+                    </div><!-- /.modal-content -->
+                  </div><!-- /.modal-dialog -->
+                </div>
+
+
+
+                
+
+
+
+
+
               </div><!-- /.box -->
             </div><!-- /.col -->
 
-            <div class="col-md-12">
-              <div class="box box-solid">
-                <div class="box-header with-border">
-                  <h3 class="box-title">Ubicación de la Planta</h3>
-                </div><!-- /.box-header -->
-                <div id="map1" class="map">
-                </div>
-              </div>
-            </div>
+            
           </div> <!-- /.row -->
           <!-- END CUSTOM TABS -->
-          <!-- START PROGRESS BARS -->
-         
-          <h2 class="page-header">Progress Bars</h2>
-          <div class="row">
-            <div class="col-md-6">
-              <div class="box box-solid">
-                <div class="box-header with-border">
-                  <h3 class="box-title">Progress Bars Different Sizes</h3>
-                </div><!-- /.box-header -->
-                <div class="box-body">
-                  <p><code>.progress</code></p>
-                  <div class="progress">
-                    <div class="progress-bar progress-bar-primary progress-bar-striped" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
-                      <span class="sr-only">40% Complete (success)</span>
-                    </div>
-                  </div>
-                  <p>Class: <code>.sm</code></p>
-                  <div class="progress progress-sm active">
-                    <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%">
-                      <span class="sr-only">20% Complete</span>
-                    </div>
-                  </div>
-                  <p>Class: <code>.xs</code></p>
-                  <div class="progress progress-xs">
-                    <div class="progress-bar progress-bar-warning progress-bar-striped" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%">
-                      <span class="sr-only">60% Complete (warning)</span>
-                    </div>
-                  </div>
-                  <p>Class: <code>.xxs</code></p>
-                  <div class="progress progress-xxs">
-                    <div class="progress-bar progress-bar-danger progress-bar-striped" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%">
-                      <span class="sr-only">60% Complete (warning)</span>
-                    </div>
-                  </div>
-                </div><!-- /.box-body -->
-              </div><!-- /.box -->
-            </div><!-- /.col (left) -->
-            <div class="col-md-6">
-              <div class="box box-solid">
-                <div class="box-header with-border">
-                  <h3 class="box-title">Progress bars</h3>
-                </div><!-- /.box-header -->
-                <div class="box-body">
-                  <div class="progress">
-                    <div class="progress-bar progress-bar-green" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
-                      <span class="sr-only">40% Complete (success)</span>
-                    </div>
-                  </div>
-                  <div class="progress">
-                    <div class="progress-bar progress-bar-aqua" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%">
-                      <span class="sr-only">20% Complete</span>
-                    </div>
-                  </div>
-                  <div class="progress">
-                    <div class="progress-bar progress-bar-yellow" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%">
-                      <span class="sr-only">60% Complete (warning)</span>
-                    </div>
-                  </div>
-                  <div class="progress">
-                    <div class="progress-bar progress-bar-red" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 80%">
-                      <span class="sr-only">80% Complete</span>
-                    </div>
-                  </div>
-                </div><!-- /.box-body -->
-              </div><!-- /.box -->
-            </div><!-- /.col (right) -->
-          </div><!-- /.row -->
-          <div class="row">
-            <div class="col-md-6">
-              <div class="box box-solid">
-                <div class="box-header with-border">
-                  <h3 class="box-title">Vertical Progress Bars Different Sizes</h3>
-                </div><!-- /.box-header -->
-                <div class="box-body text-center">
-                  <p>By adding the class <code>.vertical</code> and <code>.progress-sm</code>, <code>.progress-xs</code> or <code>.progress-xxs</code>we achieve:</p>
-                  <div class="progress vertical active">
-                    <div class="progress-bar progress-bar-primary progress-bar-striped" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="height: 40%">
-                      <span class="sr-only">40%</span>
-                    </div>
-                  </div>
-                  <div class="progress vertical progress-sm">
-                    <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="height: 100%">
-                      <span class="sr-only">100%</span>
-                    </div>
-                  </div>
-                  <div class="progress vertical progress-xs">
-                    <div class="progress-bar progress-bar-warning progress-bar-striped" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="height: 60%">
-                      <span class="sr-only">60%</span>
-                    </div>
-                  </div>
-                  <div class="progress vertical progress-xxs">
-                    <div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="height: 60%">
-                      <span class="sr-only">60%</span>
-                    </div>
-                  </div>
-                </div><!-- /.box-body -->
-              </div><!-- /.box -->
-            </div><!-- /.col (left) -->
-            <div class="col-md-6">
-              <div class="box box-solid">
-                <div class="box-header with-border">
-                  <h3 class="box-title">Vertical Progress bars</h3>
-                </div><!-- /.box-header -->
-                <div class="box-body text-center">
-                  <p>By adding the class <code>.vertical</code> we achieve:</p>
-                  <div class="progress vertical">
-                    <div class="progress-bar progress-bar-green" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="height: 40%">
-                      <span class="sr-only">40%</span>
-                    </div>
-                  </div>
-                  <div class="progress vertical">
-                    <div class="progress-bar progress-bar-aqua" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="height: 20%">
-                      <span class="sr-only">20%</span>
-                    </div>
-                  </div>
-                  <div class="progress vertical">
-                    <div class="progress-bar progress-bar-yellow" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="height: 60%">
-                      <span class="sr-only">60%</span>
-                    </div>
-                  </div>
-                  <div class="progress vertical">
-                    <div class="progress-bar progress-bar-red" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="height: 80%">
-                      <span class="sr-only">80%</span>
-                    </div>
-                  </div>
-                </div><!-- /.box-body -->
-              </div><!-- /.box -->
-            </div><!-- /.col (right) -->
-          </div><!-- /.row -->
-          <!-- END PROGRESS BARS -->
 
-          <!-- START ACCORDION & CAROUSEL-->
-          <h2 class="page-header">Bootstrap Accordion & Carousel</h2>
-          <div class="row">
-            <div class="col-md-6">
-              <div class="box box-solid">
-                <div class="box-header with-border">
-                  <h3 class="box-title">Collapsible Accordion</h3>
-                </div><!-- /.box-header -->
-                <div class="box-body">
-                  <div class="box-group" id="accordion">
-                    <!-- we are adding the .panel class so bootstrap.js collapse plugin detects it -->
-                    <div class="panel box box-primary">
-                      <div class="box-header with-border">
-                        <h4 class="box-title">
-                          <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
-                            Collapsible Group Item #1
-                          </a>
-                        </h4>
-                      </div>
-                      <div id="collapseOne" class="panel-collapse collapse in">
-                        <div class="box-body">
-                          Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-                        </div>
-                      </div>
-                    </div>
-                    <div class="panel box box-danger">
-                      <div class="box-header with-border">
-                        <h4 class="box-title">
-                          <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
-                            Collapsible Group Danger
-                          </a>
-                        </h4>
-                      </div>
-                      <div id="collapseTwo" class="panel-collapse collapse">
-                        <div class="box-body">
-                          Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-                        </div>
-                      </div>
-                    </div>
-                    <div class="panel box box-success">
-                      <div class="box-header with-border">
-                        <h4 class="box-title">
-                          <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
-                            Collapsible Group Success
-                          </a>
-                        </h4>
-                      </div>
-                      <div id="collapseThree" class="panel-collapse collapse">
-                        <div class="box-body">
-                          Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div><!-- /.box-body -->
-              </div><!-- /.box -->
-            </div><!-- /.col -->
-           
-          </div><!-- /.row -->
-          <!-- END ACCORDION & CAROUSEL-->
 
-          <!-- START TYPOGRAPHY -->
-          <h2 class="page-header">Typography</h2>
-          <div class="row">
-            <div class="col-md-6">
-              <div class="box box-solid">
-                <div class="box-header with-border">
-                  <i class="fa fa-text-width"></i>
-                  <h3 class="box-title">Headlines</h3>
-                </div><!-- /.box-header -->
-                <div class="box-body">
-                  <h1>h1. Bootstrap heading</h1>
-                  <h2>h2. Bootstrap heading</h2>
-                  <h3>h3. Bootstrap heading</h3>
-                  <h4>h4. Bootstrap heading</h4>
-                  <h5>h5. Bootstrap heading</h5>
-                  <h6>h6. Bootstrap heading</h6>
-                </div><!-- /.box-body -->
-              </div><!-- /.box -->
-            </div><!-- ./col -->
-            <div class="col-md-6">
-              <div class="box box-solid">
-                <div class="box-header with-border">
-                  <i class="fa fa-text-width"></i>
-                  <h3 class="box-title">Text Emphasis</h3>
-                </div><!-- /.box-header -->
-                <div class="box-body">
-                  <p class="lead">Lead to emphasize importance</p>
-                  <p class="text-green">Text green to emphasize success</p>
-                  <p class="text-aqua">Text aqua to emphasize info</p>
-                  <p class="text-light-blue">Text light blue to emphasize info (2)</p>
-                  <p class="text-red">Text red to emphasize danger</p>
-                  <p class="text-yellow">Text yellow to emphasize warning</p>
-                  <p class="text-muted">Text muted to emphasize general</p>
-                </div><!-- /.box-body -->
-              </div><!-- /.box -->
-            </div><!-- ./col -->
-          </div><!-- /.row -->
 
-          <div class="row">
-            <div class="col-md-6">
-              <div class="box box-solid">
-                <div class="box-header with-border">
-                  <i class="fa fa-text-width"></i>
-                  <h3 class="box-title">Block Quotes</h3>
-                </div><!-- /.box-header -->
-                <div class="box-body">
-                  <blockquote>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
-                    <small>Someone famous in <cite title="Source Title">Source Title</cite></small>
-                  </blockquote>
-                </div><!-- /.box-body -->
-              </div><!-- /.box -->
-            </div><!-- ./col -->
-            <div class="col-md-6">
-              <div class="box box-solid">
-                <div class="box-header with-border">
-                  <i class="fa fa-text-width"></i>
-                  <h3 class="box-title">Block Quotes Pulled Right</h3>
-                </div><!-- /.box-header -->
-                <div class="box-body clearfix">
-                  <blockquote class="pull-right">
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
-                    <small>Someone famous in <cite title="Source Title">Source Title</cite></small>
-                  </blockquote>
-                </div><!-- /.box-body -->
-              </div><!-- /.box -->
-            </div><!-- ./col -->
-          </div><!-- /.row -->
 
-          <div class="row">
-            <div class="col-md-4">
-              <div class="box box-solid">
-                <div class="box-header with-border">
-                  <i class="fa fa-text-width"></i>
-                  <h3 class="box-title">Unordered List</h3>
-                </div><!-- /.box-header -->
-                <div class="box-body">
-                  <ul>
-                    <li>Lorem ipsum dolor sit amet</li>
-                    <li>Consectetur adipiscing elit</li>
-                    <li>Integer molestie lorem at massa</li>
-                    <li>Facilisis in pretium nisl aliquet</li>
-                    <li>Nulla volutpat aliquam velit
-                      <ul>
-                        <li>Phasellus iaculis neque</li>
-                        <li>Purus sodales ultricies</li>
-                        <li>Vestibulum laoreet porttitor sem</li>
-                        <li>Ac tristique libero volutpat at</li>
-                      </ul>
-                    </li>
-                    <li>Faucibus porta lacus fringilla vel</li>
-                    <li>Aenean sit amet erat nunc</li>
-                    <li>Eget porttitor lorem</li>
-                  </ul>
-                </div><!-- /.box-body -->
-              </div><!-- /.box -->
-            </div><!-- ./col -->
-            <div class="col-md-4">
-              <div class="box box-solid">
-                <div class="box-header with-border">
-                  <i class="fa fa-text-width"></i>
-                  <h3 class="box-title">Ordered Lists</h3>
-                </div><!-- /.box-header -->
-                <div class="box-body">
-                  <ol>
-                    <li>Lorem ipsum dolor sit amet</li>
-                    <li>Consectetur adipiscing elit</li>
-                    <li>Integer molestie lorem at massa</li>
-                    <li>Facilisis in pretium nisl aliquet</li>
-                    <li>Nulla volutpat aliquam velit
-                      <ol>
-                        <li>Phasellus iaculis neque</li>
-                        <li>Purus sodales ultricies</li>
-                        <li>Vestibulum laoreet porttitor sem</li>
-                        <li>Ac tristique libero volutpat at</li>
-                      </ol>
-                    </li>
-                    <li>Faucibus porta lacus fringilla vel</li>
-                    <li>Aenean sit amet erat nunc</li>
-                    <li>Eget porttitor lorem</li>
-                  </ol>
-                </div><!-- /.box-body -->
-              </div><!-- /.box -->
-            </div><!-- ./col -->
-            <div class="col-md-4">
-              <div class="box box-solid">
-                <div class="box-header with-border">
-                  <i class="fa fa-text-width"></i>
-                  <h3 class="box-title">Unstyled List</h3>
-                </div><!-- /.box-header -->
-                <div class="box-body">
-                  <ul class="list-unstyled">
-                    <li>Lorem ipsum dolor sit amet</li>
-                    <li>Consectetur adipiscing elit</li>
-                    <li>Integer molestie lorem at massa</li>
-                    <li>Facilisis in pretium nisl aliquet</li>
-                    <li>Nulla volutpat aliquam velit
-                      <ul>
-                        <li>Phasellus iaculis neque</li>
-                        <li>Purus sodales ultricies</li>
-                        <li>Vestibulum laoreet porttitor sem</li>
-                        <li>Ac tristique libero volutpat at</li>
-                      </ul>
-                    </li>
-                    <li>Faucibus porta lacus fringilla vel</li>
-                    <li>Aenean sit amet erat nunc</li>
-                    <li>Eget porttitor lorem</li>
-                  </ul>
-                </div><!-- /.box-body -->
-              </div><!-- /.box -->
-            </div><!-- ./col -->
-          </div><!-- /.row -->
-
-          <div class="row">
-            <div class="col-md-6">
-              <div class="box box-solid">
-                <div class="box-header with-border">
-                  <i class="fa fa-text-width"></i>
-                  <h3 class="box-title">Description</h3>
-                </div><!-- /.box-header -->
-                <div class="box-body">
-                  <dl>
-                    <dt>Description lists</dt>
-                    <dd>A description list is perfect for defining terms.</dd>
-                    <dt>Euismod</dt>
-                    <dd>Vestibulum id ligula porta felis euismod semper eget lacinia odio sem nec elit.</dd>
-                    <dd>Donec id elit non mi porta gravida at eget metus.</dd>
-                    <dt>Malesuada porta</dt>
-                    <dd>Etiam porta sem malesuada magna mollis euismod.</dd>
-                  </dl>
-                </div><!-- /.box-body -->
-              </div><!-- /.box -->
-            </div><!-- ./col -->
-            <div class="col-md-6">
-              <div class="box box-solid">
-                <div class="box-header with-border">
-                  <i class="fa fa-text-width"></i>
-                  <h3 class="box-title">Description Horizontal</h3>
-                </div><!-- /.box-header -->
-                <div class="box-body">
-                  <dl class="dl-horizontal">
-                    <dt>Description lists</dt>
-                    <dd>A description list is perfect for defining terms.</dd>
-                    <dt>Euismod</dt>
-                    <dd>Vestibulum id ligula porta felis euismod semper eget lacinia odio sem nec elit.</dd>
-                    <dd>Donec id elit non mi porta gravida at eget metus.</dd>
-                    <dt>Malesuada porta</dt>
-                    <dd>Etiam porta sem malesuada magna mollis euismod.</dd>
-                    <dt>Felis euismod semper eget lacinia</dt>
-                    <dd>Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</dd>
-                  </dl>
-                </div><!-- /.box-body -->
-              </div><!-- /.box -->
-            </div><!-- ./col -->
-          </div><!-- /.row -->
-          <!-- END TYPOGRAPHY -->
-
-        </section><!-- /.content -->F
+        </section><!-- /.content -->

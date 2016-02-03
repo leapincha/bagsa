@@ -21,13 +21,7 @@
             <li class="<?= ($active == "regional") ? "treeview active" : "" ?>"><a href="<?= base_url(); ?>regional"><i class='fa fa-globe'></i> <span>Regionales</span></a></li>
             <li class="<?= ($active == "uo") ? "treeview active" : "" ?>"><a href="<?= base_url(); ?>uo"><i class='fa fa-th'></i> <span>UO</span></a></li>
             <li class="<?= ($active == "localidades") ? "treeview active" : "" ?>"><a href="<?= base_url(); ?>localidad"><i class='fa fa-sitemap'></i> <span>Localidades</span></a></li>
-            <li class="treeview">
-              <a href="#"><i class='fa fa-link'></i> <span>Localidades</span> <i class="fa fa-angle-left pull-right"></i></a>
-              <ul class="treeview-menu">
-                <li><a href="#">Link in level 2</a></li>
-                <li><a href="#">Link in level 2</a></li>
-              </ul>
-            </li>
+
           </ul><!-- /.sidebar-menu -->
         </section>
         <!-- /.sidebar -->

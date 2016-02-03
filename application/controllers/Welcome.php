@@ -1,24 +1,33 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
-
-class Welcome extends CI_Controller {
-
-	/**
-	 * Index Page for this controller.
-	 *
-	 * Maps to the following URL
-	 * 		http://example.com/index.php/welcome
-	 *	- or -
-	 * 		http://example.com/index.php/welcome/index
-	 *	- or -
-	 * Since this controller is set as the default controller in
-	 * config/routes.php, it's displayed at http://example.com/
-	 *
-	 * So any other public methods not prefixed with an underscore will
-	 * map to /index.php/welcome/<method_name>
-	 * @see http://codeigniter.com/user_guide/general/urls.html
-	 */
-	public function index()
-	{
-		$this->load->view('welcome_message');
-	}
+class Welcome extends MY_Controller
+{
+    function __construct()
+    {
+        parent::__construct();
+    }
+    public function upload_multiple_files()
+    {
+        $this->load->helper('form');
+        $data['title'] = 'Multiple file upload';
+        if ($this->input->post()) {
+            $config = array(
+                'upload_path' => './upload/',
+                'allowed_types' => 'gif|jpg|png',
+                'max_size' => '2048'
+            );
+            // load Upload library
+            $this->load->library('upload', $config);
+            $this->upload->do_upload('uploadedimages');
+            echo '<pre>';
+            $uploaded = $this->upload->data();
+            print_r($uploaded);
+            echo '</pre>';
+            echo '<hr />';
+            echo '<pre>';
+            print_r($this->upload->display_errors());
+            echo '</pre>';
+            exit();
+        }
+        $this->load->view('upload_form', $data);
+    }
 }
